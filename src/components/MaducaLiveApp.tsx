@@ -133,6 +133,7 @@ export default function MaducaLiveApp({ initial }: { initial: LiveWorkspaceData 
             setItems={setPortfolio}
             userId={initial.userId}
             workspaceId={initial.workspaceId}
+            notify={notify}
           />
         );
       case "financeiro":
@@ -658,12 +659,34 @@ function LivePortfolio({
   setItems,
   userId,
   workspaceId,
+  notify,
 }: {
   items: LivePortfolioItem[];
   setItems: React.Dispatch<React.SetStateAction<LivePortfolioItem[]>>;
   userId: string;
   workspaceId: string;
+  notify: (message: string) => void;
 }) {
+  const supabase = createClient();
+
+  async function remove(item: LivePortfolioItem) {
+    if (item.mediaPath) {
+      const { error: storageError } = await supabase.storage
+        .from("ugc-assets")
+        .remove([item.mediaPath]);
+      if (storageError) return notify(storageError.message);
+    }
+
+    const { error } = await supabase
+      .from("portfolio_items")
+      .delete()
+      .eq("id", item.id);
+    if (error) return notify(error.message);
+
+    setItems((current) => current.filter((entry) => entry.id !== item.id));
+    notify("Mídia excluída.");
+  }
+
   return (
     <>
       <Header eyebrow="PORTFÓLIO + STORAGE" title="Arquivos organizados com privacidade." description="Uploads entram em bucket privado; publicação pública exige uma etapa explícita." />
@@ -674,9 +697,12 @@ function LivePortfolio({
             <div className="thumb"><span>▣</span></div>
             <div className="portfolio-info">
               <div><h3>{item.title}</h3><p>{item.mediaPath || "sem arquivo"} • {item.category || "sem categoria"}</p></div>
-              <Pill tone={item.isPublic && item.permissionStatus === "granted" ? "good" : "warm"}>
-                {item.isPublic ? "Público" : "Privado"}
-              </Pill>
+              <div className="row-actions">
+                <Pill tone={item.isPublic && item.permissionStatus === "granted" ? "good" : "warm"}>
+                  {item.isPublic ? "Público" : "Privado"}
+                </Pill>
+                <button onClick={() => remove(item)}>Excluir</button>
+              </div>
             </div>
           </Card>
         ))}
