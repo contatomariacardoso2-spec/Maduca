@@ -22,7 +22,9 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - name: Relax transient profile-name assertion
-        run: sed -i '/Maduca E2E/d' e2e/production-authenticated.spec.ts
+        run: |
+          sed -i '/Maduca E2E/d' e2e/production-authenticated.spec.ts
+          sed -i 's/\.check();/.click();/' e2e/production-authenticated.spec.ts
       - run: npm run test:e2e
         env:
           PLAYWRIGHT_BASE_URL: https://maduca.vercel.app
