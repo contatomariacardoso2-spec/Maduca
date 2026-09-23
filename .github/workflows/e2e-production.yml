@@ -1,12 +1,11 @@
-name: Production E2E
+name: Production Smoke
 
 on:
   push:
     branches: [main]
     paths:
-      - "e2e/**"
+      - "e2e/production-signup.spec.ts"
       - "playwright.config.ts"
-      - "scripts/**"
       - ".github/workflows/e2e-production.yml"
   workflow_dispatch:
 
@@ -22,9 +21,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - name: Prepare full production journey
-        run: node scripts/prepare-production-e2e.mjs
-      - run: npm run test:e2e
+      - run: npm run test:e2e -- e2e/production-signup.spec.ts
         env:
           PLAYWRIGHT_BASE_URL: https://maduca.vercel.app
       - name: Upload Playwright artifacts

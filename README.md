@@ -2,6 +2,12 @@
 
 **Maduca** é um workspace para organizar a operação de uma UGC Creator de ponta a ponta: ideias, produtos, briefings, roteiro, gravação, campanhas, CRM de marcas, propostas, direitos de uso, portfólio, finanças, calendário e review semanal.
 
+## Produção
+
+**URL:** https://maduca.vercel.app
+
+O deploy de produção está conectado ao GitHub e é atualizado automaticamente pela Vercel a partir da branch `main`.
+
 ## Status atual
 
 A V1 está conectada ao projeto Supabase **Maduca** (`wpdsbrlmrqvkeklnemrz`) e inclui:
@@ -81,12 +87,11 @@ O briefing é enviado à IA somente quando a creator aciona explicitamente o Cop
 
 ## Próximos marcos
 
-1. Deploy de produção e URL pública
-2. Configurar URL de produção no Supabase Auth
-3. Ativar o AI Gateway no ambiente de produção
-4. Portal público de portfólio com URLs assinadas/publicação controlada
-5. Propostas em PDF, lembretes e automações
-6. Analytics de receita, conversão e produtividade
+1. Ativar o AI Gateway no ambiente de produção para o Copilot gerar planos reais
+2. Validar o link real de confirmação de email com uma caixa postal acessível
+3. Portal público de portfólio com URLs assinadas/publicação controlada
+4. Propostas em PDF, lembretes e automações
+5. Analytics de receita, conversão e produtividade
 
 ## Produto
 
