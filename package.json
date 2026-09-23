@@ -2,6 +2,7 @@
   "name": "maduca-ugc-os",
   "version": "0.2.0",
   "private": true,
+  "packageManager": "npm@12.1.0",
   "engines": {
     "node": ">=22"
   },
