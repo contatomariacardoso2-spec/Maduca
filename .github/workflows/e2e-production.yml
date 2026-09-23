@@ -6,6 +6,7 @@ on:
     paths:
       - "e2e/**"
       - "playwright.config.ts"
+      - "scripts/**"
       - ".github/workflows/e2e-production.yml"
   workflow_dispatch:
 
