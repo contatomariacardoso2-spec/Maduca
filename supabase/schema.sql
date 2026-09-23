@@ -162,6 +162,13 @@ create index if not exists transactions_workspace_idx on public.transactions(wor
 create index if not exists tasks_workspace_idx on public.tasks(workspace_id);
 create index if not exists tasks_due_idx on public.tasks(due_at);
 create index if not exists reviews_workspace_idx on public.weekly_reviews(workspace_id);
+create index if not exists workspaces_owner_idx on public.workspaces(owner_id);
+create index if not exists campaigns_brand_idx on public.campaigns(brand_id);
+create index if not exists ideas_product_idx on public.content_ideas(product_id);
+create index if not exists portfolio_campaign_idx on public.portfolio_items(campaign_id);
+create index if not exists transactions_campaign_idx on public.transactions(campaign_id);
+create index if not exists tasks_campaign_idx on public.tasks(campaign_id);
+create index if not exists tasks_brand_idx on public.tasks(brand_id);
 
 -- New users automatically receive a profile and a first workspace.
 create or replace function private.handle_new_user()
