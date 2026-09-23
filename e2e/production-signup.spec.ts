@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("production signup smoke", async ({ page }) => {
   const suffix = (process.env.GITHUB_SHA || Date.now().toString()).slice(0, 12);
-  const email = `maduca-e2e-${suffix}@example.com`;
+  const email = `maduca.e2e.${suffix}@gmail.com`;
   const password = "MaducaSmoke2026!";
 
   console.log(`MADUCA_SMOKE_EMAIL=${email}`);
