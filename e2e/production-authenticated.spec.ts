@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Dialog, type Page } from "@playwright/test";
 
 const EMAIL = "maduca.e2e.63d122c7847e@gmail.com";
 const PASSWORD = "MaducaSmoke2026!";
@@ -9,7 +9,7 @@ async function answerPrompts(
   action: () => Promise<void>,
 ) {
   const queue = [...answers];
-  const handler = async (dialog: Parameters<Parameters<Page["on"]>[1]>[0]) => {
+  const handler = async (dialog: Dialog) => {
     await dialog.accept(queue.shift() || "");
   };
 
@@ -18,7 +18,7 @@ async function answerPrompts(
     await action();
     await expect.poll(() => queue.length, { timeout: 5_000 }).toBe(0);
   } finally {
-    page.removeListener("dialog", handler);
+    page.off("dialog", handler);
   }
 }
 
