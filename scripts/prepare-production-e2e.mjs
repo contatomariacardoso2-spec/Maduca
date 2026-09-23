@@ -26,7 +26,7 @@ const extra = `
   await expect(
     page.getByText("Arquivo enviado para o storage privado."),
   ).toBeVisible({ timeout: 20_000 });
-  await expect(page.getByText("E2E Upload")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "E2E Upload" }).first()).toBeVisible();
 
   const uploadedCards = page
     .locator(".live-portfolio .card")
