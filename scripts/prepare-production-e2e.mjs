@@ -32,9 +32,14 @@ const extra = `
     .locator(".live-portfolio .card")
     .filter({ hasText: "E2E Upload" });
   while ((await uploadedCards.count()) > 0) {
-    const first = uploadedCards.first();
-    await first.getByRole("button", { name: "Excluir" }).click();
-    await expect(first).toHaveCount(0);
+    const before = await uploadedCards.count();
+    await uploadedCards
+      .first()
+      .getByRole("button", { name: "Excluir" })
+      .click();
+    await expect
+      .poll(() => uploadedCards.count(), { timeout: 10_000 })
+      .toBe(before - 1);
   }
 
   await page.getByRole("button", { name: "Estúdio" }).click();
