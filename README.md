@@ -2,11 +2,29 @@
 
 **Maduca** é um workspace para organizar a operação de uma UGC Creator de ponta a ponta: ideias, produtos, briefings, roteiro, gravação, campanhas, CRM de marcas, propostas, direitos de uso, portfólio, finanças, calendário e review semanal.
 
+## Status atual
+
+A V1 está conectada ao projeto Supabase **Maduca** (`wpdsbrlmrqvkeklnemrz`) e inclui:
+
+- Supabase Auth com cadastro/login por email e senha
+- Perfil + workspace criados automaticamente no primeiro cadastro
+- Postgres com 10 tabelas de domínio
+- Row Level Security em todas as tabelas públicas
+- CRUD persistente para tarefas, produtos, marcas e campanhas
+- Review semanal persistente
+- Storage privado `ugc-assets` para vídeos e imagens
+- Portfólio com mídia privada por padrão
+- Tipos TypeScript gerados diretamente do schema real
+- GitHub Actions com `npm ci`, typecheck e `next build`
+- Studio com endpoint server-side preparado para Vercel AI Gateway
+
+O Supabase Security Advisor está sem findings. Os índices de foreign key recomendados também já foram aplicados.
+
 ## Visão do produto
 
 A pergunta central do Maduca é: **“qual é o próximo passo para transformar uma ideia em conteúdo, portfólio melhor ou trabalho pago?”**
 
-A primeira versão inclui:
+A interface inclui:
 
 - Dashboard “Hoje” com prioridades, prazos e métricas
 - Estúdio de criação com briefing → plano de gravação
@@ -15,46 +33,60 @@ A primeira versão inclui:
 - Guardrails comerciais: uso, exclusividade, raw files, revisões e pagamento
 - CRM visual de marcas e propostas
 - Portfólio público/privado
-- Financeiro com valor/hora e pagamentos
-- Calendário criativo semanal
-- Review semanal com aprendizado contínuo
+- Financeiro
+- Calendário
+- Review semanal
 
 ## Stack
 
-- Next.js App Router
-- React + TypeScript
-- CSS próprio (sem dependência de UI kit)
-- Dados demo locais nesta primeira entrega
-- Estrutura de banco Supabase em `supabase/schema.sql`
+- Next.js 16 App Router
+- React 19 + TypeScript
+- Supabase Auth + Postgres + Storage + RLS
+- Vercel AI SDK / AI Gateway para o Copilot
+- CSS próprio
+- GitHub Actions
 
 ## Rodando localmente
 
 ```bash
-npm install
+cp .env.example .env.local
+npm ci
 npm run dev
 ```
 
 Abra `http://localhost:3000`.
 
-## Próximas integrações
+A publishable key do Supabase pode existir no cliente; a segurança dos dados é feita pelas policies de RLS. **Nunca** coloque `service_role`, secret key ou senha do banco em variáveis `NEXT_PUBLIC_*` ou no repositório.
 
-1. Supabase Auth + Postgres + Storage
-2. Persistência real por workspace
-3. Upload de vídeos e thumbnails
-4. IA real para briefing → roteiro/shot list
-5. Portal público de portfólio
-6. Envio de proposta em PDF
-7. Lembretes e automações
-8. Analytics de receita, conversão e produtividade
+## IA
+
+O endpoint `/api/ai/briefing` só aceita usuários autenticados. Para habilitar geração real fora de um ambiente Vercel com OIDC, configure no ambiente do servidor:
+
+```
+AI_GATEWAY_API_KEY=...
+```
+
+O briefing é enviado à IA somente quando a creator aciona explicitamente o Copilot. O prompt impede suposições sobre claims de produto, direitos de Ads, exclusividade, raw files e autorização de portfólio.
 
 ## Estrutura
 
-- `src/app` — App Router e estilos globais
-- `src/components/MaducaApp.tsx` — interface funcional da V0
-- `src/lib` — tipos e dados demo
-- `supabase/schema.sql` — modelo de dados planejado
+- `src/app` — App Router, login, API e estilos
+- `src/components/MaducaLiveApp.tsx` — workspace conectado ao Supabase
+- `src/components/MaducaApp.tsx` — fallback/demo quando não há env do Supabase
+- `src/lib/database.types.ts` — tipos gerados do banco real
+- `src/lib/supabase` — clientes browser/server e refresh de sessão
+- `supabase/schema.sql` — schema de produção versionado
 - `docs/TDD.md` — especificação técnica e de produto
-- `ai-harness/` — instruções para evolução assistida por agente
+- `ai-harness/` — contexto, guardrails e backlog para agentes
+
+## Próximos marcos
+
+1. Deploy de produção e URL pública
+2. Configurar URL de produção no Supabase Auth
+3. Ativar o AI Gateway no ambiente de produção
+4. Portal público de portfólio com URLs assinadas/publicação controlada
+5. Propostas em PDF, lembretes e automações
+6. Analytics de receita, conversão e produtividade
 
 ## Produto
 
