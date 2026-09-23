@@ -28,6 +28,15 @@ const extra = `
   ).toBeVisible({ timeout: 20_000 });
   await expect(page.getByText("E2E Upload")).toBeVisible();
 
+  const uploadedCards = page
+    .locator(".live-portfolio .card")
+    .filter({ hasText: "E2E Upload" });
+  while ((await uploadedCards.count()) > 0) {
+    const first = uploadedCards.first();
+    await first.getByRole("button", { name: "Excluir" }).click();
+    await expect(first).toHaveCount(0);
+  }
+
   await page.getByRole("button", { name: "Estúdio" }).click();
   const journeyBrief = page.getByPlaceholder(/Cole aqui o briefing/i);
   await journeyBrief.fill(
