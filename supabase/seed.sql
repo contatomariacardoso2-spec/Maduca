@@ -1,0 +1,2 @@
+-- Development seed examples. Replace workspace UUID after creating a test user/workspace.
+-- Kept intentionally non-executable by default to prevent accidental production inserts.
