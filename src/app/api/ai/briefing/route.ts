@@ -84,7 +84,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const model = process.env.MADUCA_AI_MODEL || "openai/gpt-5.4-mini";
+  const model = process.env.MADUCA_AI_MODEL || "openai/gpt-5.4";
 
   const { text } = await generateText({
     model,
