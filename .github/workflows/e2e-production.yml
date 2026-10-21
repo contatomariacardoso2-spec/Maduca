@@ -1,13 +1,14 @@
-name: Production Smoke
+name: Production Smoke (manual)
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "e2e/production-signup.spec.ts"
-      - "playwright.config.ts"
-      - ".github/workflows/e2e-production.yml"
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-production-manual
+  cancel-in-progress: true
 
 jobs:
   chromium:
@@ -33,3 +34,4 @@ jobs:
             playwright-report/
             test-results/
           if-no-files-found: ignore
+          retention-days: 3
