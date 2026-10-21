@@ -1,31 +1,21 @@
-name: Dependency lockfile
+name: Dependency lockfile check (manual)
 
+# Antes este workflow modificava e enviava um commit extra para main,
+# provocando build/deploy adicional. Agora apenas verifica sem escrever.
 on:
-  push:
-    branches: [main]
-    paths:
-      - package.json
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  lockfile:
+  verify-lockfile:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install --package-lock-only --ignore-scripts
-      - name: Commit lockfile if changed
-        run: |
-          if [ -z "$(git status --porcelain -- package-lock.json)" ]; then
-            echo "package-lock.json already current"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package-lock.json
-          git commit -m "chore: sync package-lock"
-          git push
+          cache: npm
+      - run: npm ci --ignore-scripts
